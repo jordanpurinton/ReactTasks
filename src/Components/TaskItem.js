@@ -9,10 +9,14 @@ class TaskItem extends Component {
     }
   }
 
+  onChange(task, e){
+    this.props.onEditState(task, e.target.checked);
+  }
+
   render() {
     return (
     <div className="mui--divider-bottom">
-       <Checkbox name={this.state.task._id.$oid} label={this.state.task.text} defaultChecked={this.state.task.completed} />
+       <Checkbox className={(this.state.task.completed) ? "completed" : ""} onChange={this.onChange.bind(this, this.state.task)} name={this.state.task._id.$oid} label={this.state.task.text} defaultChecked={this.state.task.completed} />
     </div>
     );
   }

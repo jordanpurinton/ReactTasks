@@ -30,6 +30,27 @@ class App extends Component {
     });
   }
 
+  editState(task, checked){
+    axios.request({
+      method: 'put',
+      url: 'https://api.mlab.com/api/1/databases/reacttask/collections/tasks/'+task._id.$oid+'?apiKey=FsiB60qrLxBOArV8pmuLIoEGEdggrnw1',
+      data: {
+        text: task.text,
+        completed: checked
+      }
+    }).then((response) => {
+      let tasks = this.state.tasks;
+      for(let i = 0;i < tasks.length;i++){
+        if(tasks[i]._id.$oid === response.data._id.$oid){
+          tasks[i].completed = checked;
+        }
+      }
+      this.setState({tasks: tasks});
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -46,7 +67,7 @@ class App extends Component {
           </Appbar>
           <br />
           <Container>
-            <Tasks tasks={this.state.tasks} />
+            <Tasks onEditState={this.editState.bind(this)} tasks={this.state.tasks} />
           </Container>
       </div>
     );
